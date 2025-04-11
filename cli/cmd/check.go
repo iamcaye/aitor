@@ -5,7 +5,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/iamcaye/aitor-cli/pkg/project"
 	"github.com/iamcaye/aitor-cli/utils"
@@ -24,39 +23,44 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("check called")
-		// Check if the current directory is a project folder
-		currentDir, err := os.Getwd()
+		projectPath, projectType, err := project.RunDetector()
 		if err != nil {
-			fmt.Println("Error getting current directory:", err)
+			fmt.Println("Error detecting project:", err)
 			return
 		}
 
-		projectPath, err := project.SearchProjectFolder(currentDir)
-		if err != nil {
-			fmt.Println("Error searching project folder:", err)
+		if projectType == project.UNKNOWN_PRJ {
+			fmt.Println("Unknown project type")
 			return
 		}
-		if projectPath == "" {
-			fmt.Println("No project folder found")
-			return
-		}
-		fmt.Println("Project folder found:", projectPath)
 
-		// get package.json file content
-		packageJsonPath := projectPath + "/package.json"
-		packageJsonContent, err := utils.ReadFile(packageJsonPath)
+		fmt.Println("Project Path:", projectPath)
+		fmt.Println("Project Type:", projectType)
+		packageContent, err := utils.ReadFile(projectPath + "/package.json")
 		if err != nil {
-			fmt.Println("Error reading package.json file:", err)
-			return
+			panic(err)
 		}
-		fmt.Println("package.json content: ", len(packageJsonContent), "bytes")
 
-		// compress the package.json file
-		compressedPackageJson, err := utils.Compress([]byte(packageJsonContent))
+		lockContent, err := utils.ReadFile(
+			fmt.Sprintf(
+				"%s/%s",
+				projectPath,
+				project.ProjectLockFile[projectType],
+			),
+		)
 		if err != nil {
-			fmt.Println("Error compressing package.json file:", err)
-			return
+			panic(err)
 		}
+
+		fmt.Println("Package Content (KB):", len(packageContent)/1024)
+		fmt.Println("Lock Content (KB):", len(lockContent)/1024)
+
+		dataString := fmt.Sprintf("[\n%s\n\n%s\n]", packageContent, lockContent)
+		compressed, err := utils.CompressFile([]byte(dataString))
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("Compressed Data (KB):", len(compressed)/1024)
 	},
 }
 

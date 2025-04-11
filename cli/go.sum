@@ -1,4 +1,8 @@
 github.com/cpuguy83/go-md2man/v2 v2.0.6/go.mod h1:oOW0eioCTA6cOiMLiUPZOpcVxMig6NIQQ7OS05n1F4g=
+github.com/google/brotli v1.1.0 h1:m2ivzhfXQnwvtI/1l9N/r1EW+I4hOYFwhzJpQKIBgeY=
+github.com/google/brotli v1.1.0/go.mod h1:XpGqLY1HgMKTQI5TU8iAKE/okaKqS9h1e6KRlRztlOU=
+github.com/google/brotli/go/cbrotli v0.0.0-20250131134309-440e03642b89 h1:uTi61Z6B5ROLqhx+kKoZ1l0+Nw5GWKpqcgjaPQQYsUs=
+github.com/google/brotli/go/cbrotli v0.0.0-20250131134309-440e03642b89/go.mod h1:nOPhAkwVliJdNTkj3gXpljmWhjc4wCaVqbMJcPKWP4s=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
