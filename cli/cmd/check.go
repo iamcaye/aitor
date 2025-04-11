@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/iamcaye/aitor-cli/client"
 	"github.com/iamcaye/aitor-cli/pkg/project"
 	"github.com/iamcaye/aitor-cli/utils"
 	"github.com/spf13/cobra"
@@ -55,12 +56,8 @@ to quickly create a Cobra application.`,
 		fmt.Println("Package Content (KB):", len(packageContent)/1024)
 		fmt.Println("Lock Content (KB):", len(lockContent)/1024)
 
-		dataString := fmt.Sprintf("[\n%s\n\n%s\n]", packageContent, lockContent)
-		compressed, err := utils.CompressFile([]byte(dataString))
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println("Compressed Data (KB):", len(compressed)/1024)
+		dataString := fmt.Sprintf("[\n%s,\n\n%s\n]", packageContent, lockContent)
+		client.SendAuditRequest([]byte(dataString))
 	},
 }
 

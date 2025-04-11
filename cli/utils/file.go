@@ -49,7 +49,7 @@ func ReadDir(dirPath string) ([]os.FileInfo, error) {
 	return filesInfo, nil
 }
 
-func CompressFile(content []byte) ([]byte, error) {
+func CompressContent(content []byte) ([]byte, error) {
 	var compressed bytes.Buffer
 	start := time.Now()
 
@@ -68,8 +68,32 @@ func CompressFile(content []byte) ([]byte, error) {
 		return nil, fmt.Errorf("error flushing file: %w", err)
 	}
 
+	// Close the writer to ensure all data is written
+	err = writer.Close()
+	if err != nil {
+		return nil, fmt.Errorf("error closing writer: %w", err)
+	}
+
 	// Log the time taken for compression
 	duration := time.Since(start)
 	fmt.Printf("Compression took: %s\n", duration)
 	return compressed.Bytes(), nil
+}
+
+func DecompressFile(compressedContent []byte) (string, error) {
+	var decompressed bytes.Buffer
+	start := time.Now()
+
+	reader := cbrotli.NewReader(bytes.NewReader(compressedContent))
+	defer reader.Close()
+
+	_, err := decompressed.ReadFrom(reader)
+	if err != nil {
+		return "", fmt.Errorf("error reading file: %w", err)
+	}
+
+	// Log the time taken for decompression
+	duration := time.Since(start)
+	fmt.Printf("Decompression took: %s\n", duration)
+	return decompressed.String(), nil
 }
